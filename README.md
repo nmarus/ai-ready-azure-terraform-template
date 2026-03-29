@@ -22,7 +22,15 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full step-by-step deployment guide.
 
 This repo is structured to give AI coding agents the context they need to produce correct, compliant Terraform without extra hand-holding.
 
-**Primary context file**: [`CLAUDE.md`](CLAUDE.md) — contains architecture overview, file layout, naming workflow, and enforced constraints. Claude Code loads it automatically. For other agents (Cursor, Copilot, etc.), start your session by telling the agent to read `CLAUDE.md` first.
+**Primary context file**: [`AGENTS.md`](AGENTS.md) — single source of truth containing architecture, file layout, naming workflow, and enforced constraints. All agent-specific files point here.
+
+| Agent | Discovery | File |
+|-------|-----------|------|
+| Claude Code | Automatic | [`.claude/CLAUDE.md`](.claude/CLAUDE.md) → `AGENTS.md` |
+| OpenAI Codex | Automatic | [`AGENTS.md`](AGENTS.md) |
+| Opencode | Automatic | [`AGENTS.md`](AGENTS.md) |
+| GitHub Copilot | Automatic | [`.github/copilot-instructions.md`](.github/copilot-instructions.md) → `AGENTS.md` |
+| Cursor | Automatic | [`.cursor/rules/terraform.mdc`](.cursor/rules/terraform.mdc) → `AGENTS.md` |
 
 **Supporting context**:
 - [`DESIGN.md`](DESIGN.md) — CAF naming conventions and tagging standards
@@ -30,10 +38,10 @@ This repo is structured to give AI coding agents the context they need to produc
 
 **Example starter prompts**:
 ```
-Add an Azure Key Vault to this template. Follow the patterns in CLAUDE.md.
+Add an Azure Key Vault to this template.
 ```
 ```
-Add two Azure Storage Accounts — one for app logs, one for data. Follow the patterns in CLAUDE.md.
+Add two Azure Storage Accounts — one for app logs, one for data.
 ```
 ```
 Configure remote state using Azure Blob Storage. See the commented backend block in providers.tf.
@@ -48,7 +56,6 @@ Configure remote state using Azure Blob Storage. See the commented backend block
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Full step-by-step deployment guide |
 | [DESIGN.md](DESIGN.md) | CAF naming conventions and tagging standards |
 | [DEPENDENCIES.md](DEPENDENCIES.md) | Tool installation instructions |
-| [CLAUDE.md](CLAUDE.md) | Architecture overview and AI agent context |
 
 ## Terraform Reference
 
