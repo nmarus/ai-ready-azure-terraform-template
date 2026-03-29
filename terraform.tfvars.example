@@ -1,0 +1,16 @@
+# Copy this file to terraform.tfvars and update the values for your environment
+
+# Project name for resource tagging (defaults to "Azure Deployment" if not defined)
+# project     = "Azure Deployment"
+
+# Prefix for resource naming (defaults to random if not defined)
+# workload    = null
+
+# Owner for resource naming (defaults to 'Azure Cloud Team' if not defined)
+# owner       = "Azure Cloud Team"
+
+# Deployment environment (defaults to 'dev' if not defined)
+# environment = "dev"
+
+# Azure region to deploy resources (defaults to 'eastus' if not defined)
+# region      = "eastus"
