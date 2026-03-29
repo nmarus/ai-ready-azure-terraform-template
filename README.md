@@ -1,8 +1,55 @@
 # Azure Terraform Template
 
-This project demonstrates a production ready template for utilizing Terraform to manage Azure infrastructure.
+A production-ready Terraform template for deploying Azure infrastructure following the [Azure Cloud Adoption Framework (CAF)](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/) naming and tagging conventions.
 
-# Documentation
+## What This Deploys
+
+- **Resource Group** — named using the CAF pattern `rg-<workload>-<environment>-<region>`, with standardized tags applied
+- A random workload name is generated automatically if `workload` is not supplied
+
+## Quick Start
+
+1. Copy the example vars file: `cp terraform.tfvars.example terraform.tfvars`
+2. Edit `terraform.tfvars` with your values (all fields are optional — defaults work out of the box)
+3. Authenticate with Azure: `az login && az account set --subscription "<subscription-id>"`
+4. `terraform init`
+5. `terraform plan -var-file="terraform.tfvars"`
+6. `terraform apply -var-file="terraform.tfvars"`
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the full step-by-step deployment guide.
+
+## Extending This Template
+
+To add new Azure resources, follow the workflow in [CLAUDE.md](CLAUDE.md#how-to-add-a-resource). Naming, tagging, and file placement rules are enforced by pre-commit hooks and CI — run `pre-commit run --all-files` before committing.
+
+## Using AI Coding Agents
+
+This repo is structured to give AI coding agents the context they need to produce correct, compliant Terraform without extra hand-holding.
+
+**Primary context file**: [`CLAUDE.md`](CLAUDE.md) — contains architecture overview, file layout, naming workflow, and enforced constraints. Claude Code loads it automatically. For other agents (Cursor, Copilot, etc.), start your session by telling the agent to read `CLAUDE.md` first.
+
+**Supporting context**:
+- [`DESIGN.md`](DESIGN.md) — CAF naming conventions and tagging standards
+- [`terraform.tfvars.example`](terraform.tfvars.example) — available inputs and their defaults
+
+**Example starter prompts**:
+```
+Add an Azure Key Vault to this template. Follow the patterns in CLAUDE.md.
+```
+```
+Add two Azure Storage Accounts — one for app logs, one for data. Follow the patterns in CLAUDE.md.
+```
+```
+Configure remote state using Azure Blob Storage. See the commented backend block in providers.tf.
+```
+
+**What's enforced automatically**: pre-commit hooks and CI validate formatting, naming, tagging, and security on every commit and PR. The agent does not need to be reminded of every rule — running `pre-commit run --all-files` will surface any violations.
+
+## Prerequisites
+
+See [DEPENDENCIES.md](DEPENDENCIES.md) for tool installation instructions (Terraform, Azure CLI, pre-commit, tflint, checkov).
+
+## Documentation
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
