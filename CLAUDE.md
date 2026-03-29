@@ -88,6 +88,33 @@ Copy `terraform.tfvars.example` to `terraform.tfvars` to configure (`.tfvars` fi
 
 `.github/workflows/terraform.yml` runs on every PR to `main` and on every push to `main` (when `.tf` or `.tfvars` files change). Steps: `terraform fmt -check`, `terraform init -backend=false`, `terraform validate`, `tflint`, `checkov`. No Azure credentials are required — init runs with `-backend=false` so no backend is configured during CI.
 
+## How to Add a Resource
+
+Follow this workflow when adding any new Azure resource to the template:
+
+1. **Add the resource to `main.tf`** — all resource blocks live here, never in other files
+2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`:
+   ```hcl
+   name = "<type>-${local.effective_workload}-${var.environment}-${var.region}"
+   ```
+   When a workload deploys multiple resources of the same type, add a `<component>` segment to distinguish them (e.g., `st-${local.effective_workload}-logs-${var.environment}-${var.region}`). Omit `<component>` when there is only one.
+3. **Apply tags** — use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })` for resource-specific tags
+4. **DRY up the name** — if the name string is referenced more than once (e.g., in both `name` and a tag), add a `locals` entry in `locals.tf`
+5. **Expose outputs** — add relevant outputs (name, id, etc.) to `outputs.tf` with a `description`
+6. **Validate** — run `pre-commit run --all-files` to format, validate, lint, and regenerate docs before committing
+
+## Constraints and Guardrails
+
+These rules are enforced by tflint and pre-commit. Violating them will cause hook or CI failures:
+
+- **Resources in `main.tf` only** — never define resource blocks in `locals.tf`, `variables.tf`, or any other file
+- **Variables require `description` and `type`** — add a `validation` block whenever the input has constraints (allowed values, format, length)
+- **Outputs require `description`**
+- **Use `#` comments only** — `//` comments are rejected by the `terraform_comment_syntax` tflint rule
+- **Never hardcode resource names** — always compose from `local.effective_workload`, `var.environment`, `var.region`
+- **All taggable resources must include tags** — use `tags = local.default_tags` or a `merge()` thereof; never omit tags
+- **Run `pre-commit run --all-files` before committing** — this formats code, regenerates README docs, validates, lints, and scans for security issues
+
 ## Documentation
 
 - `DEPENDENCIES.md` — tool installation instructions for Windows/macOS/Linux
