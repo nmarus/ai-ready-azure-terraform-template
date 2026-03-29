@@ -4,7 +4,7 @@ output "project" {
 }
 
 output "workload" {
-  description = "The workload name being used"
+  description = "The effective workload name being used (user-supplied or randomly generated)"
   value       = local.effective_workload
 }
 
@@ -23,8 +23,7 @@ output "region" {
   value       = var.region
 }
 
-# testing
-output "azurerm_client_config" {
-  description = "The current client configuration"
-  value       = data.azurerm_client_config.current
+output "resource_group_name" {
+  description = "The name of the deployed resource group"
+  value       = azurerm_resource_group.main.name
 }

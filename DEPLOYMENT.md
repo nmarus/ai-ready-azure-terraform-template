@@ -99,11 +99,7 @@ terraform destroy
 ```
 
 **Warning:** This will delete:
-- Transit Gateway and all attachments
-- VPN connections
-- CloudWatch alarms
-- Lambda function and IAM roles
-- CloudWatch log group
+- The Azure Resource Group and all resources it contains
 
 Confirm the destruction when prompted.
 

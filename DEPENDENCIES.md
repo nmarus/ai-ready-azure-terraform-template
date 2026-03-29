@@ -42,7 +42,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 #### Terraform
 
-**Purpose:** Infrastructure as Code framework for AWS resource management
+**Purpose:** Infrastructure as Code framework for Azure resource management
 
 ##### Windows
 

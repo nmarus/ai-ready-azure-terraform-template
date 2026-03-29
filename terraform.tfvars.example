@@ -3,14 +3,20 @@
 # Project name for resource tagging (defaults to "Azure Deployment" if not defined)
 # project     = "Azure Deployment"
 
-# Prefix for resource naming (defaults to random if not defined)
+# Workload name for resource naming (defaults to random if not defined)
 # workload    = null
 
-# Owner for resource naming (defaults to 'Azure Cloud Team' if not defined)
+# Owner for resource tagging (defaults to 'Azure Cloud Team' if not defined)
 # owner       = "Azure Cloud Team"
 
-# Deployment environment (defaults to 'dev' if not defined)
+# Deployment environment — must be one of: dev, test, staging, prod (defaults to 'dev' if not defined)
 # environment = "dev"
 
-# Azure region to deploy resources (defaults to 'eastus' if not defined)
+# Azure region identifier (defaults to 'eastus' if not defined)
 # region      = "eastus"
+
+# Additional tags to merge with default tags (optional)
+# additional_tags = {
+#   CostCenter = "12345"
+#   Ticket     = "OPS-999"
+# }

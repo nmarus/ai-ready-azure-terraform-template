@@ -7,29 +7,45 @@ variable "project" {
 
 # Workload name
 variable "workload" {
-  description = "Name of workload for resource naming. Defaults to random if not defined."
+  description = "Workload name used in resource naming. Must be lowercase alphanumeric and hyphens, 2-24 characters. Defaults to a random name if not defined."
   type        = string
   default     = null
-}
 
+  validation {
+    condition     = var.workload == null || can(regex("^[a-z0-9][a-z0-9-]{0,22}[a-z0-9]$", var.workload))
+    error_message = "workload must be 2-24 lowercase alphanumeric characters or hyphens, and cannot start or end with a hyphen."
+  }
+}
 
 # Owner name
 variable "owner" {
-  description = "Name of owner for resource naming. Defaults to 'Azure Cloud Team' if not defined."
+  description = "Name or email of the team or individual responsible for this workload. Defaults to 'Azure Cloud Team' if not defined."
   type        = string
   default     = "Azure Cloud Team"
 }
 
 # Environment Name
 variable "environment" {
-  description = "Deployment environment. Defaults to dev if not defined."
+  description = "Deployment environment. Must be one of: dev, test, staging, prod. Defaults to 'dev' if not defined."
   type        = string
   default     = "dev"
+
+  validation {
+    condition     = contains(["dev", "test", "staging", "prod"], var.environment)
+    error_message = "environment must be one of: dev, test, staging, prod."
+  }
 }
 
 # Region Name
 variable "region" {
-  description = "Azure region to deploy resources. Defaults to eastus if not defined."
+  description = "Azure region identifier for resource deployment (e.g. 'eastus', 'westeurope'). Defaults to 'eastus' if not defined."
   type        = string
   default     = "eastus"
+}
+
+# Additional Tags
+variable "additional_tags" {
+  description = "Additional tags to merge with the default tags. Use for workload-specific metadata such as cost center, ticket number, or compliance labels."
+  type        = map(string)
+  default     = {}
 }
