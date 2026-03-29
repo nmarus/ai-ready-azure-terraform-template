@@ -1,26 +1,20 @@
 # Azure Terraform Template
 
-A production-ready Terraform template for deploying Azure infrastructure following the [Azure Cloud Adoption Framework (CAF)](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+A starter template purpose-built for AI-assisted Azure Terraform development. It gives AI coding agents (Claude Code, GitHub Copilot, Cursor, Codex, and others) the structure, context, and guardrails they need to generate correct, compliant Azure infrastructure code — without constant hand-holding.
+
+The template follows the [Azure Cloud Adoption Framework (CAF)](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/) for naming and tagging, enforces standards automatically via pre-commit hooks and CI, and ships with agent-specific context files for every major AI coding tool so each agent understands the project conventions from the first prompt.
+
+Use this as a foundation: clone it, point your agent at it, and start building.
 
 ## Prerequisites
 
 See [DEPENDENCIES.md](DEPENDENCIES.md) for tool installation instructions (Terraform, Azure CLI, pre-commit, tflint, checkov).
 
-## Quick Start
-
-1. Copy the example vars file: `cp terraform.tfvars.example terraform.tfvars`
-2. Edit `terraform.tfvars` with your values (all fields are optional — defaults work out of the box)
-3. Authenticate with Azure: `az login`
-4. _(If you have multiple subscriptions)_ Set the target subscription: `az account set --subscription "<subscription-id>"`
-5. `terraform init`
-6. `terraform plan -var-file="terraform.tfvars"`
-7. `terraform apply -var-file="terraform.tfvars"`
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for the full step-by-step deployment guide.
-
 ## Using AI Coding Agents
 
-This repo is structured to give AI coding agents the context they need to produce correct, compliant Terraform without extra hand-holding.
+This repo is designed from the ground up so AI coding agents have the context they need to produce correct, compliant Terraform without extra hand-holding.
 
 **Primary context file**: [`AGENTS.md`](AGENTS.md) — single source of truth containing architecture, file layout, naming workflow, and enforced constraints. All agent-specific files point here.
 
@@ -48,6 +42,28 @@ Configure remote state using Azure Blob Storage. See the commented backend block
 ```
 
 **What's enforced automatically**: pre-commit hooks and CI validate formatting, naming, tagging, and security on every commit and PR. The agent does not need to be reminded of every rule — running `pre-commit run --all-files` will surface any violations.
+
+## Quick Start
+
+1. Copy the example vars file: `cp terraform.tfvars.example terraform.tfvars`
+2. Edit `terraform.tfvars` with your values (all fields are optional — defaults work out of the box)
+3. Authenticate with Azure: `az login`
+4. _(If you have multiple subscriptions)_ Set the target subscription: `az account set --subscription "<subscription-id>"`
+5. `terraform init`
+6. `terraform plan -var-file="terraform.tfvars"`
+7. `terraform apply -var-file="terraform.tfvars"`
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the full step-by-step deployment guide.
+
+## Work in Progress
+
+This template is actively evolving. The core structure is stable and usable today, but there is plenty of room to grow — more resource examples, additional agent integrations, expanded guardrails, and real-world patterns contributed by people using it in the field.
+
+**Feedback and contributions are very welcome:**
+
+- Found a bug or gap? [Open an issue](../../issues)
+- Have an improvement idea? [Start a discussion or open a PR](../../issues)
+- Using this template in your own project? Please share — open an issue and tell us how you're using it, what's working, and what isn't. That context directly shapes what gets built next.
 
 ## Related Documentation
 
