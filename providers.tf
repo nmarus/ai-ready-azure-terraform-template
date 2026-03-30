@@ -43,6 +43,6 @@ provider "azurerm" {
 #     resource_group_name  = "<tfstate-resource-group>"
 #     storage_account_name = "<tfstate-storage-account>"
 #     container_name       = "tfstate"
-#     key                  = "<workload>.terraform.tfstate"
+#     key                  = "<workload>/<environment>.terraform.tfstate"
 #   }
 # }
