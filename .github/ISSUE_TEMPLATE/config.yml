@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Deployment Guide
-    url: https://github.com/nmarus/azure-terraform-template-01/blob/main/DEPLOYMENT.md
+    url: https://github.com/nmarus/ai-ready-azure-terraform-template/blob/main/DEPLOYMENT.md
     about: Step-by-step instructions for deploying this template
   - name: Design & Naming Conventions
-    url: https://github.com/nmarus/azure-terraform-template-01/blob/main/DESIGN.md
+    url: https://github.com/nmarus/ai-ready-azure-terraform-template/blob/main/DESIGN.md
     about: CAF naming standards and tagging conventions used in this project
