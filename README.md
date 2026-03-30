@@ -100,6 +100,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azurerm_management_lock.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) | resource |
 | [azurerm_resource_group.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [random_pet.workload](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) | resource |
 
@@ -109,7 +110,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional tags to merge with the default tags. Use for workload-specific metadata such as cost center, ticket number, or compliance labels. | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment. Must be one of: dev, test, staging, prod. Defaults to 'dev' if not defined. | `string` | `"dev"` | no |
-| <a name="input_owner"></a> [owner](#input\_owner) | Name or email of the team or individual responsible for this workload. Defaults to 'Azure Cloud Team' if not defined. | `string` | `"Azure Cloud Team"` | no |
+| <a name="input_owner"></a> [owner](#input\_owner) | Name or email distribution list of the team/department responsible for this workload. Defaults to 'Azure Cloud Team' if not defined. | `string` | `"Azure Cloud Team"` | no |
 | <a name="input_project"></a> [project](#input\_project) | Project name for resource tagging. Defaults to 'Azure Deployment' if not defined. | `string` | `"Azure Deployment"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Azure region identifier for resource deployment (e.g. 'eastus', 'westeurope'). Defaults to 'eastus' if not defined. | `string` | `"eastus"` | no |
 | <a name="input_workload"></a> [workload](#input\_workload) | Workload name used in resource naming. Must be lowercase alphanumeric and hyphens, 2-24 characters. Defaults to a random name if not defined. | `string` | `null` | no |
