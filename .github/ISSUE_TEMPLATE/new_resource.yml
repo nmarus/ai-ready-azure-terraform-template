@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Review `AGENTS.md` naming and tagging conventions before submitting. New resources must follow the CAF pattern and include `tags = local.default_tags`.
+        Review `DESIGN.md` conventions before submitting.
 
   - type: input
     id: resource_type

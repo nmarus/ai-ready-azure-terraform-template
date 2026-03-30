@@ -1,0 +1,37 @@
+name: Share Your Use Case
+description: Tell us how you're using this template — what's working, what isn't, and what you've built
+labels: ["community"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is actively evolving and real-world usage context directly shapes what gets built next. Thanks for sharing!
+
+  - type: textarea
+    id: what_you_built
+    attributes:
+      label: What are you building with this template?
+      description: Brief description of your workload or project.
+    validations:
+      required: true
+
+  - type: textarea
+    id: working_well
+    attributes:
+      label: What's working well?
+
+  - type: textarea
+    id: pain_points
+    attributes:
+      label: What isn't working or feels awkward?
+
+  - type: textarea
+    id: ai_agents
+    attributes:
+      label: Which AI coding agents are you using?
+      placeholder: "e.g. Claude Code, GitHub Copilot, Cursor, Codex"
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: Anything you wish this template had?
