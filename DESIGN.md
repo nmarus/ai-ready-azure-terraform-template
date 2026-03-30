@@ -259,23 +259,43 @@ resource "azurerm_management_lock" "rg" {
 }
 ```
 
-### Computed Name Locals
+### Locals for Deduplication
 
-If a resource name string is referenced more than once (e.g., in `name` and as a `Name` tag value), extract it to `locals.tf` to prevent drift. Name locals follow the convention `<resource_type>_name`:
+Use `locals.tf` to name a value once when it is either **complex to compute** or **referenced in multiple resource blocks**. Either condition is sufficient; neither is required on its own.
+
+Common patterns include `local.effective_workload` (used in every resource name and tag) and `local.default_tags` (merged into every resource's `tags` argument).
 
 ```hcl
 # locals.tf
 locals {
-  resource_group_name = "rg-${local.effective_workload}-${var.environment}-${var.region}"
+  effective_workload = var.workload == null ? random_pet.workload.id : var.workload
+
+  default_tags = merge(
+    {
+      Project     = var.project
+      Workload    = local.effective_workload
+      Owner       = var.owner
+      Environment = var.environment
+      Region      = var.region
+      ManagedBy   = "Terraform"
+    },
+    var.additional_tags
+  )
 }
 
 # main.tf
 resource "azurerm_resource_group" "main" {
-  name     = local.resource_group_name
+  name     = "rg-${local.effective_workload}-${var.environment}-${var.region}"
   location = var.region
-  tags     = merge(local.default_tags, { Name = local.resource_group_name })
+  tags     = local.default_tags
 }
 ```
+
+**When not to extract to a local:**
+- A simple inline expression used in only one place — keep it inline.
+- A value Terraform already tracks as a resource attribute (e.g. `azurerm_storage_account.main.name`) — reference the attribute directly instead of duplicating it in a local.
+
+Prefer readability over mechanical deduplication. A local should make code easier to understand, not add indirection for its own sake.
 
 ---
 
