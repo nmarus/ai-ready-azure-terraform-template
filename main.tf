@@ -5,6 +5,7 @@ resource "azurerm_resource_group" "main" {
   tags = local.default_tags
 }
 
+# Applied only to prod and staging — prevents accidental deletion per CAF governance.
 resource "azurerm_management_lock" "rg" {
   count      = contains(["prod", "staging"], var.environment) ? 1 : 0
   name       = "lock-${local.effective_workload}-${var.environment}"

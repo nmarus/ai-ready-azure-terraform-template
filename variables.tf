@@ -1,11 +1,9 @@
-# Project Name
 variable "project" {
-  description = "Project name for resource tagging. Defaults to 'Azure Deployment' if not defined."
+  description = "Project name applied to all resource tags. Defaults to 'Azure Deployment' if not defined."
   type        = string
   default     = "Azure Deployment"
 }
 
-# Workload name
 variable "workload" {
   description = "Workload name used in resource naming. Must be lowercase alphanumeric and hyphens, 2-24 characters. Defaults to a random name if not defined."
   type        = string
@@ -17,14 +15,12 @@ variable "workload" {
   }
 }
 
-# Owner name
 variable "owner" {
-  description = "Name or email distribution list of the team/department responsible for this workload. Defaults to 'Azure Cloud Team' if not defined."
+  description = "Name or email distribution list of the team responsible for this workload. Defaults to 'Azure Cloud Team' if not defined."
   type        = string
   default     = "Azure Cloud Team"
 }
 
-# Environment Name
 variable "environment" {
   description = "Deployment environment. Must be one of: dev, test, staging, prod. Defaults to 'dev' if not defined."
   type        = string
@@ -36,16 +32,14 @@ variable "environment" {
   }
 }
 
-# Region Name
 variable "region" {
-  description = "Azure region identifier for resource deployment (e.g. 'eastus', 'westeurope'). Defaults to 'eastus' if not defined."
+  description = "Azure region for resource deployment (e.g. 'eastus', 'westeurope'). Defaults to 'eastus' if not defined."
   type        = string
   default     = "eastus"
 }
 
-# Additional Tags
 variable "additional_tags" {
-  description = "Additional tags to merge with the default tags. Use for workload-specific metadata such as cost center, ticket number, or compliance labels."
+  description = "Additional tags merged with the defaults. Use for workload-specific metadata such as cost center, ticket number, or compliance labels."
   type        = map(string)
   default     = {}
 }

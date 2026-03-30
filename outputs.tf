@@ -1,29 +1,29 @@
 output "project" {
-  description = "The project name being used"
+  description = "Project name applied to all resource tags"
   value       = var.project
 }
 
 output "workload" {
-  description = "The effective workload name being used (user-supplied or randomly generated)"
+  description = "Effective workload name used in resource naming (user-supplied or randomly generated)"
   value       = local.effective_workload
 }
 
 output "owner" {
-  description = "The owner name being used"
+  description = "Team or distribution list responsible for this workload"
   value       = var.owner
 }
 
 output "environment" {
-  description = "The deployment environment being used"
+  description = "Deployment environment (dev, test, staging, prod)"
   value       = var.environment
 }
 
 output "region" {
-  description = "The Azure region being used"
+  description = "Azure region where resources are deployed"
   value       = var.region
 }
 
 output "resource_group_name" {
-  description = "The name of the deployed resource group"
+  description = "Name of the deployed resource group"
   value       = azurerm_resource_group.main.name
 }
