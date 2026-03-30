@@ -12,7 +12,7 @@ The template follows a flat single-module structure (no nested modules):
 
 - **`variables.tf`** — Six input variables: `project`, `workload`, `owner`, `environment`, `region`, `additional_tags`
 - **`locals.tf`** — Computes `effective_workload` (falls back to `random_pet` if `workload` is null) and `default_tags` (merged with `additional_tags`)
-- **`main.tf`** — `random_pet` resource for workload fallback and `azurerm_resource_group` resource
+- **`main.tf`** — `azurerm_resource_group` resource (and any future infrastructure resources)
 - **`outputs.tf`** — Exposes all variable values plus the deployed `resource_group_name`
 - **`providers.tf`** — Requires Terraform ≥1.14, azurerm ~>4.0, random ~>3.8; local state backend with a commented `backend "azurerm"` remote state example; sets `prevent_deletion_if_contains_resources = true` (non-empty resource groups will block `terraform destroy`)
 
@@ -39,7 +39,7 @@ name = "vm-${local.effective_workload}-web-${var.environment}-${var.region}-${fo
 
 Use `tags = local.default_tags` on all taggable resources. For resource-specific additional tags:
 ```hcl
-tags = merge(local.default_tags, { Name = local.resource_group_name })
+tags = merge(local.default_tags, { Component = "web" })
 ```
 
 Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataClassification`) via `var.additional_tags` — do not modify `locals.tf`.
@@ -49,7 +49,7 @@ Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataC
 1. **Add the resource to `main.tf`** — all resource blocks live here, never in other files
 2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`; add a `<component>` segment for distinct logical roles; append a zero-padded instance number (`format("%03d", count.index + 1)`) when deploying multiple identical instances; see [DESIGN.md](DESIGN.md) for resource-specific character constraints and global uniqueness handling
 3. **Apply tags** — use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })`
-4. **DRY up the name** — if the name string is referenced more than once, add a `locals` entry in `locals.tf`
+4. **Extract to locals when warranted** — add a `locals` entry in `locals.tf` if the expression is complex to compute or appears in multiple resource blocks; for simple names used only once, inline the expression directly; never create a local that just duplicates a resource attribute Terraform already tracks (e.g. prefer `azurerm_storage_account.main.name` over a redundant local)
 5. **Expose outputs** — add relevant outputs (name, id, etc.) to `outputs.tf` with a `description`
 6. **Validate** — run `pre-commit run --all-files` to format, validate, lint, and regenerate docs
 
@@ -137,4 +137,4 @@ Hooks run in order on every commit:
 
 - `DEPENDENCIES.md` — tool installation instructions for Windows/macOS/Linux
 - `DEPLOYMENT.md` — step-by-step deployment guide
-- `DESIGN.md` — authoritative design standards: naming conventions, tagging taxonomy, Terraform code standards (variable design, `count` vs `for_each`, `lifecycle` rules, resource locks, computed name locals), and remote state key convention
+- `DESIGN.md` — authoritative design standards: naming conventions, tagging taxonomy, Terraform code standards (variable design, `count` vs `for_each`, `lifecycle` rules, resource locks, locals for deduplication), and remote state key convention
