@@ -1,5 +1,6 @@
 # AI-Ready Azure Terraform Template
 
+[![Terraform](https://github.com/nmarus/ai-ready-azure-terraform-template/actions/workflows/terraform.yml/badge.svg)](https://github.com/nmarus/ai-ready-azure-terraform-template/actions/workflows/terraform.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A starter template purpose-built for AI-assisted Azure Terraform development. It gives AI coding agents (Claude Code, GitHub Copilot, Cursor, Codex, and others) the structure, context, and guardrails they need to generate correct, compliant Azure infrastructure code — without constant hand-holding.
