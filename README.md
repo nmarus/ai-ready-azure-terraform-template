@@ -1,4 +1,4 @@
-# Azure Terraform Template
+# AI-Ready Azure Terraform Template
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
