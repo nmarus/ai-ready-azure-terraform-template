@@ -18,19 +18,32 @@ The template follows a flat single-module structure (no nested modules):
 
 ## Naming & Tagging Conventions
 
-**Resource naming pattern**: `<resource-type>-<workload>-<environment>-<region>`
+**Resource naming pattern**: `<resource-type>-<workload>-[component]-<environment>-<region>-[###]`
 
 Compose names from locals and variables — never hardcode:
 ```hcl
 name = "<type>-${local.effective_workload}-${var.environment}-${var.region}"
 ```
 
-When a workload deploys multiple resources of the same type, add a `<component>` segment:
+When a workload deploys multiple resources of the **same type with distinct logical roles**, add a `<component>` segment:
 ```hcl
 name = "st-${local.effective_workload}-logs-${var.environment}-${var.region}"
 name = "st-${local.effective_workload}-data-${var.environment}-${var.region}"
 ```
-Omit `<component>` when there is only one resource of that type.
+
+When a workload deploys **multiple identical instances** of a resource (e.g. VMs), append a zero-padded instance number instead:
+```hcl
+name = "vm-${local.effective_workload}-${var.environment}-${var.region}-${format("%03d", count.index + 1)}"
+```
+
+Use both `<component>` and instance number when multiple identical instances share a logical role:
+```hcl
+name = "vm-${local.effective_workload}-web-${var.environment}-${var.region}-${format("%03d", count.index + 1)}"
+```
+
+Omit `<component>` and instance number when there is only one resource of that type.
+
+> See [DESIGN.md](DESIGN.md) for the full naming and tagging standards, including all pattern examples.
 
 **Default tags applied to all resources**:
 ```
@@ -42,7 +55,7 @@ Use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })` f
 ## How to Add a Resource
 
 1. **Add the resource to `main.tf`** — all resource blocks live here, never in other files
-2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`
+2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`; add a `<component>` segment for distinct logical roles; append a zero-padded instance number (`format("%03d", count.index + 1)`) when deploying multiple identical instances
 3. **Apply tags** — use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })`
 4. **DRY up the name** — if the name string is referenced more than once, add a `locals` entry in `locals.tf`
 5. **Expose outputs** — add relevant outputs (name, id, etc.) to `outputs.tf` with a `description`
@@ -56,7 +69,7 @@ These rules are enforced by tflint and pre-commit. Violating them causes hook or
 - **Variables require `description` and `type`** — add a `validation` block whenever the input has constraints (allowed values, format, length)
 - **Outputs require `description`**
 - **Use `#` comments only** — `//` comments are rejected by the `terraform_comment_syntax` tflint rule
-- **Never hardcode resource names** — always compose from `local.effective_workload`, `var.environment`, `var.region`
+- **Never hardcode resource names** — always compose from `local.effective_workload`, `var.environment`, `var.region`, and (when applicable) `count.index` for instance numbers
 - **All taggable resources must include tags** — use `tags = local.default_tags` or a `merge()` thereof; never omit tags
 - **Run `pre-commit run --all-files` before committing** — formats code, regenerates README docs, validates, lints, and scans for security issues
 
@@ -95,6 +108,8 @@ tflint --config=.tflint.hcl
 checkov -d .
 ```
 
+> See [DEPLOYMENT.md](DEPLOYMENT.md) for the full step-by-step deployment guide, including troubleshooting. See [DEPENDENCIES.md](DEPENDENCIES.md) for tool installation instructions.
+
 ## TFLint Rules
 
 Key enforced rules (see `.tflint.hcl`):
@@ -117,9 +132,13 @@ Hooks run in order on every commit:
 4. `terraform_tflint` — lints with `.tflint.hcl` rules
 5. `terraform_checkov` — security scanning
 
+> See [DEPLOYMENT.md](DEPLOYMENT.md) for operational setup instructions (installing hooks, first-time run).
+
 ## CI/CD
 
 `.github/workflows/terraform.yml` runs on every PR to `main` and on every push to `main` (when `.tf` or `.tfvars` files change). Steps: `terraform fmt -check`, `terraform init -backend=false`, `terraform validate`, `tflint`, `checkov`. No Azure credentials are required — init runs with `-backend=false` so no backend is configured during CI.
+
+> See [DEPLOYMENT.md](DEPLOYMENT.md) for CI/CD integration details and pipeline configuration files.
 
 ## Documentation
 

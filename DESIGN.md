@@ -6,7 +6,7 @@ This document defines the design standards that this project follows.
 
 This project utilizes naming conventions defined in the Azure Cloud Adoption Framework.
 
-`<resource-type>-<workload>-[component]-<environment>-<region>`
+`<resource-type>-<workload>-[component]-<environment>-<region>-[###]`
 
 Parameters in `[brackets]` are optional:
 
@@ -14,21 +14,33 @@ Parameters in `[brackets]` are optional:
 |---|---|---|
 | `resource-type` | Yes | Azure resource type abbreviation (e.g. `rg`, `st`, `vnet`, `kv`) |
 | `workload` | Yes | Workload name — use `local.effective_workload` |
-| `component` | **No** | Only include when a workload deploys **multiple resources of the same type** to distinguish them |
+| `component` | **No** | Only include when a workload deploys **multiple resources of the same type with distinct logical roles** (e.g. `logs` vs `data`) |
 | `environment` | Yes | Deployment environment (e.g. `dev`, `prod`) — use `var.environment` |
 | `region` | Yes | Azure region (e.g. `eastus`) — use `var.region` |
+| `instance` | **No** | Zero-padded instance count (e.g. `001`, `002`) — include when multiple identical instances of a resource may exist (e.g. VMs, VNets, NICs) |
 
-**Single resource of a type** (omit `component`):
+**Single resource of a type** (omit both `component` and `instance`):
 ```
 rg-myapp-prod-eastus
-st-myapp-prod-eastus
 kv-myapp-prod-eastus
 ```
 
-**Multiple resources of the same type** (include `component` to distinguish):
+**Multiple resources with distinct logical roles** (use `component`, omit `instance`):
 ```
 st-myapp-logs-prod-eastus
 st-myapp-data-prod-eastus
+```
+
+**Multiple identical instances** (omit `component`, use `instance`):
+```
+vm-myapp-prod-eastus-001
+vm-myapp-prod-eastus-002
+```
+
+**Multiple identical instances with a shared role** (use both `component` and `instance`):
+```
+vm-myapp-web-prod-eastus-001
+vm-myapp-web-prod-eastus-002
 ```
 
 **Reference:**

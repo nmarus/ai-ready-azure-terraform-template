@@ -24,7 +24,9 @@
 ## Resources Added / Modified
 
 <!-- List each Azure resource type changed and its naming pattern, e.g.:
-- `azurerm_storage_account` → `st-<workload>-<env>-<region>`
+- `azurerm_storage_account` → `st-<workload>-<environment>-<region>`
+- `azurerm_virtual_machine` → `vm-<workload>-<environment>-<region>-<###>`
+See DESIGN.md for the full naming convention.
 -->
 
 ## Testing

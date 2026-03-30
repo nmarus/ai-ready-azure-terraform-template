@@ -5,8 +5,7 @@
 Before deploying, ensure you have:
 
 - **Azure Account** with permissions to create resources
-- **Terraform** ≥ 1.14.0 installed
-- **Azure CLI** configured with appropriate credentials
+- **Terraform**, **Azure CLI**, and optional tooling installed — see [DEPENDENCIES.md](DEPENDENCIES.md)
 
 ## Configuration Setup
 
