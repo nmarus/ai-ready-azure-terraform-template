@@ -1,0 +1,68 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in the Terraform configuration
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, please run `pre-commit run --all-files` and `terraform validate` to rule out local configuration issues.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal steps to reproduce the issue.
+      placeholder: |
+        1. Set `terraform.tfvars` with `environment = "dev"`
+        2. Run `terraform plan`
+        3. Observe error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Output
+      description: Paste the full error message or plan output.
+      render: shell
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Target Environment
+      options:
+        - dev
+        - test
+        - staging
+        - prod
+        - N/A
+    validations:
+      required: true
+
+  - type: input
+    id: terraform_version
+    attributes:
+      label: Terraform Version
+      placeholder: "e.g. 1.9.0"
+    validations:
+      required: true
+
+  - type: input
+    id: azurerm_version
+    attributes:
+      label: azurerm Provider Version
+      placeholder: "e.g. 4.1.0"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information (Azure region, subscription tier, etc.)

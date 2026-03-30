@@ -1,0 +1,54 @@
+name: New Azure Resource Request
+description: Request a new Azure resource be added to the template
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Review `AGENTS.md` naming and tagging conventions before submitting. New resources must follow the CAF pattern and include `tags = local.default_tags`.
+
+  - type: input
+    id: resource_type
+    attributes:
+      label: Terraform Resource Type
+      placeholder: "e.g. azurerm_storage_account"
+    validations:
+      required: true
+
+  - type: input
+    id: naming_pattern
+    attributes:
+      label: Proposed Naming Pattern
+      description: Follow the CAF convention from `AGENTS.md`.
+      placeholder: "e.g. st-<workload>-<env>-<region>"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this resource needed? What workload or use case does it support?
+    validations:
+      required: true
+
+  - type: textarea
+    id: outputs
+    attributes:
+      label: Expected Outputs
+      description: List the outputs that should be exposed in `outputs.tf` (name, id, etc.).
+      placeholder: |
+        - `storage_account_name`
+        - `storage_account_id`
+
+  - type: textarea
+    id: variables
+    attributes:
+      label: New Variables Required
+      description: List any new input variables needed, with type and description.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Security considerations, SKU constraints, region availability, etc.

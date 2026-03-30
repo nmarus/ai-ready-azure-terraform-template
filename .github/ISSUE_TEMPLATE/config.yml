@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Deployment Guide
+    url: https://github.com/nmarus/azure-terraform-template-01/blob/main/DEPLOYMENT.md
+    about: Step-by-step instructions for deploying this template
+  - name: Design & Naming Conventions
+    url: https://github.com/nmarus/azure-terraform-template-01/blob/main/DESIGN.md
+    about: CAF naming standards and tagging conventions used in this project

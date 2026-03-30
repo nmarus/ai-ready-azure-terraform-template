@@ -1,0 +1,32 @@
+name: Documentation Update
+description: Report missing, incorrect, or outdated documentation
+labels: ["documentation"]
+body:
+  - type: dropdown
+    id: doc_file
+    attributes:
+      label: Affected File
+      options:
+        - README.md
+        - AGENTS.md
+        - DESIGN.md
+        - DEPLOYMENT.md
+        - DEPENDENCIES.md
+        - CLAUDE.md
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to change?
+      description: Describe what is missing, wrong, or unclear.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Correction
+      description: Optional — paste or describe the correct content.

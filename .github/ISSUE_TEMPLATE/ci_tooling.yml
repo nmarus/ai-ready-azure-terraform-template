@@ -1,0 +1,44 @@
+name: CI / Tooling Issue
+description: Report a problem with CI workflows, pre-commit hooks, linting, or documentation generation
+labels: ["ci", "tooling"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - GitHub Actions workflow
+        - pre-commit hooks
+        - tflint
+        - checkov
+        - terraform-docs
+        - Dependabot
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is failing or behaving unexpectedly?
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Output
+      description: Paste the relevant CI log or hook output.
+      render: shell
+
+  - type: input
+    id: workflow_run
+    attributes:
+      label: GitHub Actions Run URL
+      description: Link to the failed run, if applicable.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
