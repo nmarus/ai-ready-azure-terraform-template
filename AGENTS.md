@@ -18,44 +18,36 @@ The template follows a flat single-module structure (no nested modules):
 
 ## Naming & Tagging Conventions
 
+> See [DESIGN.md](DESIGN.md) for the full naming and tagging standards: pattern reference, resource-specific character constraints, global uniqueness handling, required vs. recommended tags, and canonical tag value lists.
+
 **Resource naming pattern**: `<resource-type>-<workload>-[component]-<environment>-<region>-[###]`
 
 Compose names from locals and variables — never hardcode:
 ```hcl
+# Single resource of a type
 name = "<type>-${local.effective_workload}-${var.environment}-${var.region}"
-```
 
-When a workload deploys multiple resources of the **same type with distinct logical roles**, add a `<component>` segment:
-```hcl
+# Multiple resources with distinct logical roles — add component segment
 name = "st-${local.effective_workload}-logs-${var.environment}-${var.region}"
-name = "st-${local.effective_workload}-data-${var.environment}-${var.region}"
-```
 
-When a workload deploys **multiple identical instances** of a resource (e.g. VMs), append a zero-padded instance number instead:
-```hcl
+# Multiple identical instances — append zero-padded instance number
 name = "vm-${local.effective_workload}-${var.environment}-${var.region}-${format("%03d", count.index + 1)}"
-```
 
-Use both `<component>` and instance number when multiple identical instances share a logical role:
-```hcl
+# Both component and instance number
 name = "vm-${local.effective_workload}-web-${var.environment}-${var.region}-${format("%03d", count.index + 1)}"
 ```
 
-Omit `<component>` and instance number when there is only one resource of that type.
-
-> See [DESIGN.md](DESIGN.md) for the full naming and tagging standards, including all pattern examples.
-
-**Default tags applied to all resources**:
-```
-Project, Workload, Owner, Environment, Region, ManagedBy
+Use `tags = local.default_tags` on all taggable resources. For resource-specific additional tags:
+```hcl
+tags = merge(local.default_tags, { Name = local.resource_group_name })
 ```
 
-Use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })` for resource-specific tags. Additional tags can be injected via the `additional_tags` variable without modifying `locals.tf`.
+Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataClassification`) via `var.additional_tags` — do not modify `locals.tf`.
 
 ## How to Add a Resource
 
 1. **Add the resource to `main.tf`** — all resource blocks live here, never in other files
-2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`; add a `<component>` segment for distinct logical roles; append a zero-padded instance number (`format("%03d", count.index + 1)`) when deploying multiple identical instances
+2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`; add a `<component>` segment for distinct logical roles; append a zero-padded instance number (`format("%03d", count.index + 1)`) when deploying multiple identical instances; see [DESIGN.md](DESIGN.md) for resource-specific character constraints and global uniqueness handling
 3. **Apply tags** — use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })`
 4. **DRY up the name** — if the name string is referenced more than once, add a `locals` entry in `locals.tf`
 5. **Expose outputs** — add relevant outputs (name, id, etc.) to `outputs.tf` with a `description`
@@ -144,4 +136,4 @@ Hooks run in order on every commit:
 
 - `DEPENDENCIES.md` — tool installation instructions for Windows/macOS/Linux
 - `DEPLOYMENT.md` — step-by-step deployment guide
-- `DESIGN.md` — naming conventions and tagging standards
+- `DESIGN.md` — authoritative design standards: naming conventions, tagging taxonomy, Terraform code standards (variable design, `count` vs `for_each`, `lifecycle` rules, resource locks, computed name locals), and remote state key convention
