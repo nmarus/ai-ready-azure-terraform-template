@@ -6,11 +6,8 @@ alwaysApply: true
 
 Read `AGENTS.md` in the repo root for full project context before making changes. It contains architecture, file layout, naming conventions, how to add resources, and all enforced constraints.
 
-## Critical Rules (enforced by tflint and CI — violations will fail)
+## Documentation
 
-- **Resources in `main.tf` only** — never define resource blocks in any other file
-- **Name pattern**: `"<type>-${local.effective_workload}-${var.environment}-${var.region}"` — never hardcode names
-- **All taggable resources must have** `tags = local.default_tags` (or a `merge()` of it)
-- **Use `#` comments only** — `//` is rejected by the linter
-- **Variables and outputs require** `description` and `type`
-- **Before committing**: run `pre-commit run --all-files`
+- `DEPENDENCIES.md` — tool installation instructions for Windows/macOS/Linux
+- `DEPLOYMENT.md` — step-by-step deployment guide
+- `DESIGN.md` — naming conventions and tagging standards
