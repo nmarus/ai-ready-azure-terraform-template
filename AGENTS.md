@@ -57,7 +57,8 @@ Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataC
 
 These rules are enforced by tflint and pre-commit. Violating them causes hook or CI failures:
 
-- **Resources in `main.tf` only** — never define resource blocks in `locals.tf`, `variables.tf`, or any other file
+- **Infrastructure resources in `main.tf` only** — all Azure provider resource blocks live in `main.tf`; never scatter them across other files
+- **Support resources in `locals.tf`** — non-infrastructure resources that exist solely to compute values consumed by locals (e.g. `random_pet`, `random_id`) are defined in `locals.tf`, immediately above the `locals` block they support
 - **Variables require `description` and `type`** — add a `validation` block whenever the input has constraints (allowed values, format, length)
 - **Outputs require `description`**
 - **Use `#` comments only** — `//` comments are rejected by the `terraform_comment_syntax` tflint rule

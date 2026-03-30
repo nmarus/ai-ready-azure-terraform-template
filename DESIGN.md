@@ -143,6 +143,26 @@ Use only the canonical values defined above — do not free-form these tags. Inc
 
 These standards define how Terraform configuration must be written to maintain CAF alignment. They apply to all `.tf` files in this repository.
 
+### Support Resources
+
+Terraform resources that exist solely to generate computed values consumed by `locals.tf` (e.g. `random_pet`, `random_id`) are **support resources**. They belong in `locals.tf`, placed immediately above the `locals` block they feed, so the computation and its dependency are collocated.
+
+Infrastructure resources — any `azurerm_*`, `azuread_*`, or similar provider resources that deploy actual cloud infrastructure — must remain in `main.tf`.
+
+**Rule of thumb:** if removing a resource would require changing only `locals.tf` and nothing in `main.tf`, it is a support resource.
+
+```hcl
+# locals.tf — support resource lives here, above the local that consumes it
+resource "random_pet" "workload" {
+  length    = 1
+  separator = "-"
+}
+
+locals {
+  effective_workload = var.workload == null ? random_pet.workload.id : var.workload
+}
+```
+
 ### Variable Design
 
 | Rule | When to Apply |
