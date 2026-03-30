@@ -19,7 +19,7 @@ variable "workload" {
 
 # Owner name
 variable "owner" {
-  description = "Name or email of the team or individual responsible for this workload. Defaults to 'Azure Cloud Team' if not defined."
+  description = "Name or email distribution list of the team/department responsible for this workload. Defaults to 'Azure Cloud Team' if not defined."
   type        = string
   default     = "Azure Cloud Team"
 }
