@@ -1,6 +1,6 @@
 # Design
 
-This document is the authoritative reference for this repository. [`AGENTS.md`](AGENTS.md) references this document and provides AI-agent-optimized summaries for code generation.
+This document is the authoritative design reference for this repository. [`AGENTS.md`](AGENTS.md) references this document and provides AI-agent-optimized summaries for code generation.
 
 ## Naming Conventions
 

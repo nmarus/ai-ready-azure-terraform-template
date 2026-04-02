@@ -4,15 +4,15 @@ Project context for AI coding agents. This file is the single source of truth �
 
 ## Project Overview
 
-This is an Azure Infrastructure as Code (IaC) Terraform template that provisions an Azure Resource Group with standardized naming and tagging conventions based on the Azure Cloud Adoption Framework (CAF).
+This is an Azure Infrastructure as Code (IaC) Terraform project that provisions infrastructure in Azure. It includes structures to facilitate best practices, consistent standards, and operational maturity that follows guidelines found in the Azure Cloud Adoption Framework (CAF).
 
 ## Architecture
 
-The template follows a flat single-module structure (no nested modules):
+The project is initialized as a flat single-module structure (no nested modules):
 
 - **`variables.tf`** — Six input variables: `project`, `workload`, `owner`, `environment`, `region`, `additional_tags`
 - **`locals.tf`** — Computes `effective_workload` (falls back to `random_pet` if `workload` is null) and `default_tags` (merged with `additional_tags`)
-- **`main.tf`** — `azurerm_resource_group` resource (and any future infrastructure resources)
+- **`main.tf`** — `azurerm_resource_group` resource (and any future **core** infrastructure resources)
 - **`outputs.tf`** — Exposes all variable values plus the deployed `resource_group_name`
 - **`providers.tf`** — Requires Terraform ≥1.14, azurerm ~>4.0, random ~>3.8; local state backend with a commented `backend "azurerm"` remote state example; sets `prevent_deletion_if_contains_resources = true` (non-empty resource groups will block `terraform destroy`)
 
