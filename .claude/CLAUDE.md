@@ -8,4 +8,4 @@ Read [`AGENTS.md`](../AGENTS.md) for full project context: architecture, naming 
 
 - `DEPENDENCIES.md` — tool installation instructions for Windows/macOS/Linux
 - `DEPLOYMENT.md` — step-by-step deployment guide
-- `DESIGN.md` — naming conventions and tagging standards
+- `DESIGN.md` — authoritative reference for design, standards, and goals
