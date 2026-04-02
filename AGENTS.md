@@ -8,7 +8,7 @@ This is an Azure Infrastructure as Code (IaC) Terraform project that provisions 
 
 ## Architecture
 
-The project is initialized as a flat single-module structure (no nested modules):
+The project is initialized as a flat single-module structure. As the project grows, resources may be split into additional `.tf` files or extracted into child modules — see [File and Module Organization](#file-and-module-organization) for when and how to do this.
 
 - **`variables.tf`** — Six input variables: `project`, `workload`, `owner`, `environment`, `region`, `additional_tags`
 - **`locals.tf`** — Computes `effective_workload` (falls back to `random_pet` if `workload` is null) and `default_tags` (merged with `additional_tags`)
@@ -46,7 +46,7 @@ Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataC
 
 ## How to Add a Resource
 
-1. **Add the resource to `main.tf`** — all resource blocks live here, never in other files
+1. **Add the resource to `main.tf`** — start here by default; move to a dedicated `.tf` file or child module only when the criteria in [File and Module Organization](#file-and-module-organization) are met
 2. **Name it using the CAF pattern** — compose from `local.effective_workload`, `var.environment`, `var.region`; add a `<component>` segment for distinct logical roles; append a zero-padded instance number (`format("%03d", count.index + 1)`) when deploying multiple identical instances; see [DESIGN.md](DESIGN.md) for resource-specific character constraints and global uniqueness handling
 3. **Apply tags** — use `tags = local.default_tags` or `tags = merge(local.default_tags, { ... })`
 4. **Extract to locals when warranted** — add a `locals` entry in `locals.tf` if the expression is complex to compute or appears in multiple resource blocks; for simple names used only once, inline the expression directly; never create a local that just duplicates a resource attribute Terraform already tracks (e.g. prefer `azurerm_storage_account.main.name` over a redundant local)
@@ -57,7 +57,7 @@ Inject workload-specific extended tags (e.g. `CostCenter`, `Criticality`, `DataC
 
 These rules are enforced by tflint and pre-commit. Violating them causes hook or CI failures:
 
-- **Infrastructure resources in `main.tf` only** — all Azure provider resource blocks live in `main.tf`; never scatter them across other files
+- **Infrastructure resources start in `main.tf`** — all Azure provider resource blocks begin in `main.tf`; split into additional `.tf` files or child modules only when the criteria in [File and Module Organization](#file-and-module-organization) are met
 - **Support resources in `locals.tf`** — non-infrastructure resources that exist solely to compute values consumed by locals (e.g. `random_pet`, `random_id`) are defined in `locals.tf`, immediately above the `locals` block they support
 - **Variables require `description` and `type`** — add a `validation` block whenever the input has constraints (allowed values, format, length)
 - **Outputs require `description`**
@@ -65,6 +65,43 @@ These rules are enforced by tflint and pre-commit. Violating them causes hook or
 - **Never hardcode resource names** — always compose from `local.effective_workload`, `var.environment`, `var.region`, and (when applicable) `count.index` for instance numbers
 - **All taggable resources must include tags** — use `tags = local.default_tags` or a `merge()` thereof; never omit tags
 - **Run `pre-commit run --all-files` before committing** — formats code, regenerates README docs, validates, lints, and scans for security issues
+
+## File and Module Organization
+
+**Default:** Begin with all infrastructure resources in `main.tf`. Do not pre-emptively split files or create modules — start flat and refactor when a clear threshold is met.
+
+### When to split into additional `.tf` files
+
+Refactor `main.tf` into purpose-grouped files when one or more of these apply:
+
+- `main.tf` exceeds ~150 lines and contains resources from clearly separate concerns
+- Multiple distinct services are defined (e.g. networking + compute + storage + monitoring together)
+- Readability would be significantly improved by grouping related resources
+- Resource separation would improve version control — smaller, focused files produce cleaner commit history, simpler diffs, easier PR reviews, and fewer merge conflicts when multiple contributors are active
+
+Common groupings and the resources they contain:
+
+| File | Typical contents |
+|---|---|
+| `networking.tf` | VNets, subnets, NSGs, route tables, private endpoints |
+| `dns.tf` | Private DNS zones and virtual network links |
+| `security.tf` | Key Vault, managed identities, role assignments |
+| `monitoring.tf` | Log Analytics workspaces, diagnostic settings, alerts, action groups |
+| `logging.tf` | Storage accounts and Event Hubs used for log archival |
+| `compute.tf` | Virtual machines, scale sets, App Service plans |
+| `storage.tf` | Storage accounts used for application data |
+
+All split files share the same `variables.tf`, `locals.tf`, `outputs.tf`, and `providers.tf`. Support resources (`random_pet`, `random_id`) remain in `locals.tf`.
+
+### When to extract into a child module
+
+Create a module under `modules/<name>/` when:
+
+- A group of resources is reused across multiple environments or workloads with varying parameters
+- A self-contained component (e.g. a Log Analytics workspace + diagnostic settings bundle) is deployed more than once
+- Encapsulation would meaningfully reduce duplication (DRY principle)
+
+Do not create a module for a group of resources deployed only once — a grouped `.tf` file is simpler and sufficient.
 
 ## Common Commands
 
