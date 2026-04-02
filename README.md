@@ -7,7 +7,7 @@ A starter template purpose-built for AI-assisted Azure Terraform development. It
 
 The template follows the [Azure Cloud Adoption Framework (CAF)](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/) for naming and tagging, enforces standards automatically via pre-commit hooks and CI, and ships with agent-specific context files for every major AI coding tool so each agent understands the project conventions from the first prompt.
 
-Use this as a foundation: clone it, point your agent at it, and start building.
+Use this as a foundation: clone it, point your agent at it, and start building. When your workload is ready, replace this file with [`README.implementation.md`](README.implementation.md) — a ready-to-use README template for the deployed project.
 
 ## Prerequisites
 
@@ -73,6 +73,7 @@ This template is actively evolving. The core structure is stable and usable toda
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Full step-by-step deployment guide |
 | [DESIGN.md](DESIGN.md) | CAF naming conventions and tagging standards |
 | [DEPENDENCIES.md](DEPENDENCIES.md) | Tool installation instructions |
+| [README.implementation.md](README.implementation.md) | README starting point for the deployed project |
 
 ## Terraform Reference
 
